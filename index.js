@@ -8,22 +8,22 @@ const DEF_MIN_RATE = -10000,
 
 const interval = 5 // Minutes
 
-const PLUGIN_NAME   = 'homebridge-amber-price';
-const ACCESSORY_NAME = 'Energy Price';
+const PLUGIN_NAME   = 'homebridge-localvolts-price';
+const ACCESSORY_NAME = 'LocalVolts Price';
 
 module.exports = function(homebridge) {
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
-    homebridge.registerAccessory(PLUGIN_NAME, ACCESSORY_NAME, EnergyPrice);
+    homebridge.registerAccessory(PLUGIN_NAME, ACCESSORY_NAME, LocalVoltsPrice);
 }
 
-class EnergyPrice {
+class LocalVoltsPrice {
     constructor(log, config) {
     	this.log = log
     	this.config = config
     	this.service = new Service.TemperatureSensor(this.config.name)
     	this.name = config["name"];
-    	this.manufacturer = config["manufacturer"] || "Energy Price";
+    	this.manufacturer = config["manufacturer"] || "LocalVolts Price";
 	    this.model = config["model"] || "Monitor";
 	    this.apiKey = config["apiKey"] || "API Key";
 	    this.apiId = config["apiId"] || "API ID";
@@ -46,17 +46,20 @@ class EnergyPrice {
 		this.timer = null
 		try {
 //		    const hourlyData = await api.get('https://hourlypricing.comed.com/api?type=currenthouraverage')
-			
-//			this.log.info('https://api.amber.com.au/v1/sites/'+this.apiId+'/prices/current?next=0&previous=0&resolution=5');
-//			this.log.info('KEY='+this.apiKey);
-		    const amberData = await api.get('https://api.amber.com.au/v1/sites/'+this.apiId+'/prices/current?next=0&previous=0&resolution=30', {headers: {'accept': 'application/json', 'Authorization': 'Bearer ' + this.apiKey}});
-		    this.log.info('Data from API', amberData.data[0].perKwh);
-		    if (amberData.data[0].perKwh == null) {
+			const headers = {
+				"authorization": `apikey ${self.apiKey}`,
+				"partner": self.apiId
+			}
+		    const localvoltsData = await api.get(`https://api.localvolts.com/v1/customer/interval?NMI=${this.nmi}`, {headers: headers});
+		    // feed_in_kwh => 'earningsFlexUp'
+        	// general_kwh => 'costsFlexUp'
+			this.log.info('Data from API', localvoltsData.data[0].costsFlexUp);
+		    if (localvoltsData.data[0].costsFlexUp == null) {
 		        // No price in hourlyData, return maximum allowed value
 		        this.service.getCharacteristic(Characteristic.CurrentTemperature).updateValue(DEF_MAX_RATE)
 		    } else {
 		        // Return positive value
-		        this.service.getCharacteristic(Characteristic.CurrentTemperature).updateValue(amberData.data[0].perKwh, 1)
+		        this.service.getCharacteristic(Characteristic.CurrentTemperature).updateValue(localvoltsData.data[0].costsFlexUp, 1)
 		    }
 		} catch (error) {
 		    this.log.error('Error getting current 30m estimated price %s', error)
@@ -70,3 +73,5 @@ class EnergyPrice {
         return (value-32)*5/9;
     }
 }
+
+module.exports.LocalVoltsPrice = LocalVoltsPrice;

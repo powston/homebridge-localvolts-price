@@ -1,6 +1,6 @@
-# Homebridge-Amber-Price
+# Homebridge-LocalVolts-Price
 
-Homebridge-Amber-Price is a project forked from [anon1y4012/homebridge-energy-price](https://github.com/anon1y4012/homebridge-energy-price). This version has been modified to talk to the API of Amber Electric in Australia
+Homebridge-LocalVolts-Price is a project forked from [anon1y4012/homebridge-energy-price](https://github.com/anon1y4012/homebridge-energy-price). This version has been modified to talk to the API of LocalVolts in Australia
 
 ## Installation
 
@@ -10,7 +10,7 @@ If you want to install manually, you can run the following commands:
 
 ```bash
 sudo npm install -g homebridge
-sudo npm install -g homebridge-amber-price
+sudo npm install -g homebridge-localvolts-price
 ```
 
 **Note:** If you install homebridge using the following command:
@@ -22,7 +22,7 @@ sudo npm install -g --unsafe-perm homebridge
 All subsequent installations must follow the same format, like this:
 
 ```bash
-sudo npm install -g --unsafe-perm homebridge-amber-price
+sudo npm install -g --unsafe-perm homebridge-localvolts-price
 ```
 
 ## Configuration
@@ -32,11 +32,12 @@ You will need to add the following example accessory configuration to your homeb
 ```json
 "accessories": [
     {
-         "name": "Amber Price",
-            "manufacturer": "Amber",
-            "model": "Amber Price Monitor",
+         "name": "LocalVolts Price",
+            "manufacturer": "LocalVolts",
+            "model": "LocalVolts Price Monitor",
             "apiKey": "=== your API Key here ====",
-            "apiId": "=== Your API ID here ====",
+            "apiId": "=== Your API PARTNER ID here ====",
+            "nmi": "=== Your NMI here ====",
             "refreshInterval": 5,
             "accessory": "Energy Price"
     }
@@ -51,6 +52,7 @@ Field | Description
 **name** | (required) The name you want to use for the power level widget.
 **manufacturer** | (optional) This shows up in the HomeKit accessory characteristics.
 **model** | (optional) This shows up in the HomeKit accessory characteristics.
-**refreshInterval** | (required) The refresh interval in minutes for polling Amber.
-**apiID** | (required) Your Amber API site ID
-**apiKey** | (required) Your Amber API Key starts with psk_
+**refreshInterval** | (required) The refresh interval in minutes for polling LocalVolts.
+**nmi** | (required) Your National Meter Identifier (NMI) for your electricity meter.
+**apiID** | (required) Your LocalVolts API Partner ID
+**apiKey** | (required) Your LocalVolts API Key starts with psk_

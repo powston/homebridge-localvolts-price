@@ -6,13 +6,13 @@
 			"title": "Name",
 			"type": "string",
 			"required": true,
-			"default": "Amber Price"
+			"default": "LocalVolts Price"
 		},
 		"manufacturer": {
 			"title": "Manufacturer",
 			"type": "string",
 			"required": false,
-			"default": "Amber"
+			"default": "LocalVolts"
 		},
 		"model": {
 			"title": "Model",
@@ -25,21 +25,28 @@
 			"type": "integer",
 			"required": true,
 			"default": 5,
-			"description": "Specifies the number of minutes between Amber polls and updates. Default is 5."
+			"description": "Specifies the number of minutes between LocalVolts polls and updates. Default is 5."
 
 		},
 		"apiKey": {
 			"title": "API Key",
 			"type": "string",
 			"required": true,
-			"description": "Amber API Key"
+			"description": "LocalVolts API Key"
+
+		},
+		"nmi": {
+			"title": "NMI",
+			"type": "string",
+			"required": true,
+			"description": "National Meter Identifier"
 
 		},
 		"apiId": {
 			"title": "API ID",
 			"type": "string",
 			"required": true,
-			"description": "Amber API ID"
+			"description": "LocalVolts API Partner ID"
 
 		}
 	}
